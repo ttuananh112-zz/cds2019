@@ -6,41 +6,34 @@ import sys
 import rospy
 import cv2
 from std_msgs.msg import String
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage
 from cv_bridge import CvBridge, CvBridgeError
-
+import numpy as np
+import matplotlib.pyplot as plt
 
 class image_converter:
     def __init__(self):
-        #self.image_pub = rospy.Publisher("image_topic_2",Image)
-
+        
         self.bridge = CvBridge()
         print("beforecallback")
-        self.image_sub = rospy.Subscriber("Team1_image", Image, self.callback)
+        self.image_sub = rospy.Subscriber("Team1_image/compressed", CompressedImage, callback=self.callback, queue_size=1)
+        print("aftercallback")
+        rospy.Rate(10)
 
     def callback(self, data):
         print("callback")
         try:
-            cv_image = self.bridge.imgmsg_to_cv2(data, "bgr8")
-            cv2.imshow("Image window", cv_image)
+            np_arr = np.fromstring(data.data, np.uint8)
+            image_np = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+            # image_np = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
+            cv2.imshow("Image window", image_np)
+            cv2.waitKey(25)
+
         except CvBridgeError as e:
             print(e)
-
-        #(rows,cols,channels) = cv_image.shape
-        #if cols > 60 and rows > 60 :
-        #   cv2.circle(cv_image, (50,50), 10, 255)
-
-
-        cv2.waitKey(30)
-
-        #try:
-        #    self.image_pub.publish(self.bridge.cv2_to_imgmsg(cv_image, "bgr8"))
-        #except CvBridgeError as e:
-        #    print(e)
 
 
 if __name__ == '__main__':
     rospy.init_node('cds', anonymous=True)
     ic = image_converter()
     rospy.spin()
-    # cv2.destroyAllWindows()
