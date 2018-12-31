@@ -10,7 +10,8 @@ from sensor_msgs.msg import CompressedImage
 from cv_bridge import CvBridge, CvBridgeError
 import numpy as np
 import matplotlib.pyplot as plt
-from lane_detector import lane_detect
+from sign_detection import detect_sign
+from lane_detection import detect_lane
 
 class image_converter:
     def __init__(self):
@@ -24,9 +25,11 @@ class image_converter:
             np_arr = np.fromstring(data.data, np.uint8)
             image_np = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
             # NOTE: image_np.shape = (240,320,3)
-            cv2.imshow("Image window", image_np)
+            img = detect_sign(image_np)
+            cv2.imshow("Image window", img)
             cv2.waitKey(1)
-            left_fit, right_fit, out_img = lane_detect(image_np)
+
+            left_fit, right_fit, out_img = detect_lane(image_np)
 
             cv2.imshow("Detect_lane", out_img)
             cv2.waitKey(1)
