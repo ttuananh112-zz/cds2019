@@ -7,7 +7,6 @@ import torchvision.models as models
 import numpy as np
 import model
 
-NUM_CLASSES = 2
 IMAGE_SIZE = (32, 32)
 BATCH_SIZE = 64
 
@@ -42,7 +41,7 @@ def train(dataset):
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print(device)
 
-    net = model.Net(NUM_CLASSES)
+    net = model.Net(dataset.classes)
     net = net.to(device)
 
     lr = float(input('Enter learning rate: '))
