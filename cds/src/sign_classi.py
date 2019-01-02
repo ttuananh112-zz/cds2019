@@ -18,7 +18,6 @@ class CNN(tr.nn.Module):
         self.fc2 = tr.nn.Linear(2048, 1024, True)
         self.fc3 = tr.nn.Linear(1024, 3, True)
 
-
     def forward(self, X): #3*32*32 #3*227*227
         X = tr.nn.functional.relu(self.conv1(X))
         X = self.pool(X)
@@ -51,7 +50,6 @@ def predict(img, new_size=64):
         output= tr.argmax(output)
 
     return int(output) #0= not turn; 1= turn right, 2= turn left
-
 
 # with tr.no_grad():
 #     while True:
