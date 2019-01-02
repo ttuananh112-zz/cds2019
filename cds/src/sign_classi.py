@@ -12,9 +12,9 @@ class CNN32(tr.nn.Module):
         #pool 6
         self.conv3 = tr.nn.Conv2d(128, 256, 3) #4
         #pool 2
-        self.fc1 = tr.nn.Linear(256 *2 *2, 2048) #
-        self.fc2 = tr.nn.Linear(2048, 1024)
-        self.fc3 = tr.nn.Linear(1024, 3)
+        self.fc1 = tr.nn.Linear(256 *2 *2, 2048, True) #
+        self.fc2 = tr.nn.Linear(2048, 1024, True)
+        self.fc3 = tr.nn.Linear(1024, 3, True)
 
 
     def forward(self, X):
@@ -49,12 +49,12 @@ def predict(img, new_size=32):
     return int(output) #0= not turn; 1= turn right, 2= turn left
 
 # with tr.no_grad():
-    # while True:
-    #     dir= raw_input("file directory: ")
-    #     if dir == '': break
+#     # while True:
+#     #     dir= raw_input("file directory: ")
+#     #     if dir == '': break
 #     for i in range(1,27):
 #         dir= 'other imgs/o' + str(i) + '.png'
-
+#
 #         img= cv2.imread(dir)
 #         cv2.imshow(str(predict(img)), cv2.resize(img, (150,150)))
 #         cv2.waitKey(0)
