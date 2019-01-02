@@ -93,8 +93,10 @@ def sliding_window_polyfit(img):
     rightx = nonzerox[right_lane_inds]
     righty = nonzeroy[right_lane_inds]
 
-    left_fit, right_fit = (None, None)
+    left_fit = [0, 0, 0]
+    right_fit = [0, 0, 0]
     # Fit a second order polynomial to each
+
     if len(leftx) != 0:
         left_fit = np.polyfit(lefty, leftx, 2)
     if len(rightx) != 0:
@@ -185,8 +187,7 @@ def lane_detect(source_img):
         cv2.polylines(out_img, [pts1], False, (0,255,255), 1)
         cv2.polylines(out_img, [pts2], False, (0,255,255), 1)
     except:
-        left_fit = (0,0,0)
-        right_fit = (0,0,0)
+        pass
     # Draw the windows on the visualization image
     for rect in rectangles:
         cv2.rectangle(out_img, (rect[2], rect[0]), (rect[3], rect[1]), (0, 255, 0), 2)
