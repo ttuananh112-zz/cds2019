@@ -13,12 +13,13 @@ import matplotlib.pyplot as plt
 from sign_detection import detect_sign
 from sign_classi import predict
 from lane_detector import lane_detect
-from car_control import drive_car
+from car_control import car_control
 
 class image_converter:
     def __init__(self):
         self.bridge = CvBridge()
         self.image_sub = rospy.Subscriber("Team1_image/compressed", CompressedImage, callback=self.callback, queue_size=1)
+        self.cc = car_control()
         rospy.Rate(10)
 
     def callback(self, data):
@@ -35,11 +36,11 @@ class image_converter:
             left_fit, right_fit, out_img = lane_detect(image_np)
 
             # print("Left ",left_fit," Right ",right_fit)
-            cv2.imshow("Detect_lane", out_img)
-            cv2.waitKey(1)
+            # cv2.imshow("Detect_lane", out_img)
+            # cv2.waitKey(1)
 
             # drive
-            drive_car(left_fit, right_fit, sign_size)
+            self.cc.control(left_fit, right_fit, sign_size)
 
         except CvBridgeError as e:
             print(e)
@@ -48,13 +49,13 @@ class image_converter:
 
 if __name__ == '__main__':
     rospy.init_node('cds', anonymous=True)
-    cv2.namedWindow("houghlines")
-    def nothing():
-        pass
-    cv2.createTrackbar("rho", "houghlines",2,255,nothing)
-    cv2.createTrackbar("theta", "houghlines",180,255,nothing)
-    cv2.createTrackbar("minLine", "houghlines",78,255,nothing)
-    cv2.createTrackbar("maxGap", "houghlines",10,255,nothing)
-    cv2.waitKey(1)
+    # cv2.namedWindow("houghlines")
+    # def nothing():
+    #     pass
+    # cv2.createTrackbar("rho", "houghlines",2,255,nothing)
+    # cv2.createTrackbar("theta", "houghlines",180,255,nothing)
+    # cv2.createTrackbar("minLine", "houghlines",78,255,nothing)
+    # cv2.createTrackbar("maxGap", "houghlines",10,255,nothing)
+    # cv2.waitKey(1)
     ic = image_converter()
     rospy.spin()

@@ -33,11 +33,11 @@ class CNN32(tr.nn.Module):
         return X
 
 net= CNN32()
-net.load_state_dict(tr.load('param/sign_classi_param_9932_half'))
+net.load_state_dict(tr.load('sign_classi_param_9932_half', map_location=device))
 
 def predict(img, new_size=32):
-    img = cv2.resize(img, (new_size, new_size))
     img = np.array(img, dtype= np.float32) / 255.
+    img = cv2.resize(img, (new_size, new_size))
 
     img= img.reshape(1,new_size,new_size,3).transpose((0,3,1,2))
 

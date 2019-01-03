@@ -12,7 +12,7 @@ def unwarp(img, src, dst):
     return warped
 
 
-# detect white line
+# detect white line (210, 240)
 def hls_l_thresh(img, thresh=(210, 240)):
     # 1) Convert to HLS color space
     hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
@@ -27,12 +27,8 @@ def hls_l_thresh(img, thresh=(210, 240)):
 def sliding_window_polyfit(img):
     # Take a histogram of the bottom half of the image
     histogram = np.sum(img, axis=0)
-    # Find the peak of the left and right halves of the histogram
-    # These will be the starting point for the left and right lines
     midpoint = np.int(histogram.shape[0] // 2)
-    # quarter_point = np.int(midpoint // 2)
     # Previously the left/right base was the max of the left/right half of the histogram
-    # this changes it so that only a quarter of the histogram (directly to the left/right) is considered
     leftx_base = np.argmax(histogram[20:midpoint-20]) + 20 # margin sliding window
     rightx_base = np.argmax(histogram[midpoint+20:2*midpoint]) + midpoint + 20
 
@@ -135,17 +131,17 @@ def lane_detect(source_img):
 
     gray_img = bin_white * 255
 
-    cv2.imshow("Bird_view_bin", gray_img)
-    cv2.waitKey(1)
+    # cv2.imshow("Bird_view_bin", gray_img)
+    # cv2.waitKey(1)
 
     # Detect lines
     # lines = cv2.HoughLinesP(gray_img, 1, np.pi / 180, 128, minLineLength = 30, maxLineGap = 2)
-    rho = cv2.getTrackbarPos("rho", "houghlines")
-    theta = cv2.getTrackbarPos("theta", "houghlines")
-    minLine = cv2.getTrackbarPos("minLine", "houghlines")
-    maxGap = cv2.getTrackbarPos("maxGap", "houghlines")
+    # rho = cv2.getTrackbarPos("rho", "houghlines")
+    # theta = cv2.getTrackbarPos("theta", "houghlines")
+    # minLine = cv2.getTrackbarPos("minLine", "houghlines")
+    # maxGap = cv2.getTrackbarPos("maxGap", "houghlines")
 
-    lines = cv2.HoughLinesP(gray_img, rho, np.pi / theta, 128, minLineLength=minLine,maxLineGap=maxGap)
+    lines = cv2.HoughLinesP(gray_img, 2, np.pi / 180, 128, minLineLength=78,maxLineGap=10)
 
     houghline_img = np.zeros_like(bin_white)
     if lines is not None:

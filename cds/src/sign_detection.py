@@ -18,7 +18,8 @@ def detect_sign(image_np):
     # combined = cv2.GaussianBlur(combined, (5, 5), 0)
     combined = cv2.blur(combined, (3, 3))
     rev = cv2.bitwise_not(combined)
-    cv2.imshow("Thresholding", rev)
+    # cv2.imshow("Thresholding", rev)
+
     cntr_frame, contours, hierarchy = cv2.findContours(combined, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     # image_np = cv2.cvtColor(image_np, cv2.COLOR_BGR2RGB)
     sign_x = sign_y = sign_size = 0
@@ -47,7 +48,9 @@ def detect_sign(image_np):
         if w > 10 and h > 10 and (0.7 <= h / w <= 1.0 / 0.7):
 
             pred = predict(img[y:y2, x:x2])
+
             if pred != 0:
+                # print(pred)
                 sign_x = x
                 sign_y = y
                 cv2.rectangle(img, (x, y), (x2, y2), (0, 0, 255), 1)
