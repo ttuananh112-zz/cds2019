@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+from sign_classi import predict
 
 OFFSET = 0
 
@@ -44,9 +45,16 @@ def detect_sign(image_np):
             y2 = height
 
         if w > 10 and h > 10 and (0.7 <= h / w <= 1.0 / 0.7):
-            sign_x = x
-            sign_y = y
-            sign_size = w
-            cv2.rectangle(img, (x, y), (x2, y2), (0, 0, 255), 1)
+
+            pred = predict(img[y:y2, x:x2])
+            if pred != 0:
+                sign_x = x
+                sign_y = y
+                cv2.rectangle(img, (x, y), (x2, y2), (0, 0, 255), 1)
+                if pred ==1:
+                    sign_size = w
+                else:
+                    sign_size = -w
+                break
 
     return img, sign_x, sign_y, sign_size
